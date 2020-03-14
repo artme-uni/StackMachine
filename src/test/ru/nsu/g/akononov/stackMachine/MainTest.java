@@ -1,0 +1,281 @@
+package ru.nsu.g.akononov.stackMachine;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class MainTest {
+
+    private ByteArrayOutputStream output = new ByteArrayOutputStream();
+
+    void setInput(String s)
+    {
+        ByteArrayInputStream in = new ByteArrayInputStream(s.getBytes());
+        System.setIn(in);
+    }
+
+    @BeforeEach
+    void setUp() {
+            System.setOut(new PrintStream(output));
+
+    }
+
+    @Test
+    @DisplayName("Comments")
+    void test1()
+    {
+        setInput("# 5 5 3 + print\n");
+        Main.main(new String[0]);
+
+        assertEquals("", output.toString());
+    }
+
+    @Test
+    @DisplayName("Add 1")
+    void test2()
+    {
+        setInput("5 5 + print\n");
+        Main.main(new String[0]);
+
+        assertEquals("# Output: 10 \n", output.toString());
+    }
+
+    @Test
+    @DisplayName("Add 2")
+    void test3()
+    {
+        setInput("5 -2 + print\n");
+        Main.main(new String[0]);
+
+        assertEquals("# Output: 3 \n", output.toString());
+    }
+
+    @Test
+    @DisplayName("Sub")
+    void test4()
+    {
+        setInput("3 10 - print\n");
+        Main.main(new String[0]);
+
+        assertEquals("# Output: -7 \n", output.toString());
+    }
+
+    @Test
+    @DisplayName("Mult")
+    void test5()
+    {
+        setInput("7 3 * print\n");
+        Main.main(new String[0]);
+
+        assertEquals("# Output: 21 \n", output.toString());
+    }
+
+    @Test
+    @DisplayName("Div 1")
+    void test6()
+    {
+        setInput("3 10 / print\n");
+        Main.main(new String[0]);
+
+        assertEquals("# Output: 0 \n", output.toString());
+    }
+
+    @Test
+    @DisplayName("Div 2")
+    void test7()
+    {
+        setInput("10 3 / print\n");
+        Main.main(new String[0]);
+
+        assertEquals("# Output: 3 \n", output.toString());
+    }
+
+    @Test
+    @DisplayName("Div 2")
+    void test8()
+    {
+        setInput("10 0 / print\n");
+        Main.main(new String[0]);
+
+        assertEquals("# Cannot divide by zero\n" +
+                "# Output: 10 \n", output.toString());
+    }
+
+    @Test
+    @DisplayName("Sqrt")
+    void test9()
+    {
+        setInput("10 sqrt print\n");
+        Main.main(new String[0]);
+
+        assertEquals("# Output: 3 \n", output.toString());
+    }
+
+    @Test
+    @DisplayName("Define 1")
+    void test10()
+    {
+        setInput("define func 1 + ; 5 func print\n");
+        Main.main(new String[0]);
+
+        assertEquals("# Output: 6 \n", output.toString());
+    }
+
+    @Test
+    @DisplayName("Define 2")
+    void test23()
+    {
+        setInput("define\n");
+        Main.main(new String[0]);
+
+        assertEquals("# Expected 'define func_name'\n", output.toString());
+    }
+
+    @Test
+    @DisplayName("Dup")
+    void test11()
+    {
+        setInput("-12 dup print\n");
+        Main.main(new String[0]);
+
+        assertEquals("# Output: -12 -12 \n", output.toString());
+    }
+
+    @Test
+    @DisplayName("Swap")
+    void test12()
+    {
+        setInput("1 2 swap print\n");
+        Main.main(new String[0]);
+
+        assertEquals("# Output: 2 1 \n", output.toString());
+    }
+
+    @Test
+    @DisplayName("Rot")
+    void test13()
+    {
+        setInput("1 2 3 4 5 rot print\n");
+        Main.main(new String[0]);
+
+        assertEquals("# Output: 2 3 4 5 1 \n", output.toString());
+    }
+
+    @Test
+    @DisplayName("Drop")
+    void test14()
+    {
+        setInput("1 2 3 drop print\n");
+        Main.main(new String[0]);
+
+        assertEquals("# Output: 1 2 \n", output.toString());
+    }
+
+    @Test
+    @DisplayName("Less")
+    void test15()
+    {
+        setInput("1 2 < print\n");
+        Main.main(new String[0]);
+
+        assertEquals("# Output: 1 \n", output.toString());
+    }
+
+    @Test
+    @DisplayName("Greater")
+    void test16()
+    {
+        setInput("1 2 > print\n");
+        Main.main(new String[0]);
+
+        assertEquals("# Output: 0 \n", output.toString());
+    }
+
+    @Test
+    @DisplayName("Condition 1")
+    void test18()
+    {
+        setInput("5 dup [ print 1 - dup ]\n");
+        Main.main(new String[0]);
+
+        assertEquals("# Output: 5 \n" + "# Output: 4 \n" + "# Output: 3 \n"
+                + "# Output: 2 \n" + "# Output: 1 \n", output.toString());
+    }
+
+    @Test
+    @DisplayName("Condition 2")
+    void test19()
+    {
+        setInput("define factorial 1 swap dup [ dup rot * swap 1 - dup ] drop ;\n" +
+                "5 factorial print\n");
+        Main.main(new String[0]);
+
+        assertEquals("# Output: 120 \n", output.toString());
+    }
+
+    @Test
+    @DisplayName("Condition 3")
+    void test21()
+    {
+        setInput("0 1 < [ 1 print 0 ]\n");
+        Main.main(new String[0]);
+
+        assertEquals("# Output: 1 \n", output.toString());
+    }
+
+    @Test
+    @DisplayName("Unknown cmd")
+    void test22()
+    {
+        setInput("Unk\n");
+        Main.main(new String[0]);
+
+        assertEquals("# Command 'Unk' not found\n", output.toString());
+    }
+
+    @Test
+    @DisplayName("Minimum")
+    void test24()
+    {
+        setInput("define min\n" +
+                "  dup rot dup rot 1 rot rot  <\n" +
+                "  [ drop swap drop 0 0 ] \n" +
+                "  [ drop 0 ] ;\n" +
+                "\n" +
+                "5 7 min print\n");
+        Main.main(new String[0]);
+
+        assertEquals("# Output: 5 \n", output.toString());
+    }
+
+    @Test
+    @DisplayName("Loop")
+    void test25()
+    {
+        setInput("5\n" + "dup [ dup dup [ print 1 - dup ] drop 1 - dup ]");
+        Main.main(new String[0]);
+
+        assertEquals("# Output: 5 5 \n" +
+                "# Output: 5 4 \n" + "# Output: 5 3 \n" +
+                "# Output: 5 2 \n" + "# Output: 5 1 \n" +
+                "# Output: 4 4 \n" + "# Output: 4 3 \n" +
+                "# Output: 4 2 \n" + "# Output: 4 1 \n" +
+                "# Output: 3 3 \n" + "# Output: 3 2 \n" +
+                "# Output: 3 1 \n" + "# Output: 2 2 \n" +
+                "# Output: 2 1 \n" + "# Output: 1 1 \n", output.toString());
+    }
+
+
+    @AfterEach
+    void tearDown() {
+            System.setOut(null);
+            System.setIn(null);
+    }
+}
