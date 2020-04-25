@@ -2,7 +2,7 @@ package ru.nsu.g.akononov.stackMachine.cmds;
 
 import ru.nsu.g.akononov.stackMachine.Cmd;
 
-public class Print extends Cmd {
+public class ShowAll extends Cmd {
 
     @Override
     public void execution() {
@@ -12,6 +12,11 @@ public class Print extends Cmd {
             return;
         }
 
-        System.out.println(stack.peek());
+        System.out.print("# ");
+        for(var element : stack) {
+            System.out.print(element + " ");
+        }
+        System.out.println();
+
     }
 }
