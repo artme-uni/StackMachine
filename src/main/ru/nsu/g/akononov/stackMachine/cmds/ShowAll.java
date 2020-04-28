@@ -6,12 +6,6 @@ public class ShowAll extends Cmd {
 
     @Override
     public void execution() {
-        if(stack.empty())
-        {
-            System.out.println("# Stack is empty");
-            return;
-        }
-
         System.out.print("# ");
         for(var element : stack) {
             System.out.print(element + " ");

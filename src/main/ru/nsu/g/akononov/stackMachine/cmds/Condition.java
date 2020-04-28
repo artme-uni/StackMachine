@@ -12,10 +12,6 @@ public class Condition extends Cmd {
             System.out.println("# Line cannot be empty");
             return;
         }
-        if (stack.isEmpty()) {
-            System.out.println("# Stack is empty");
-            return;
-        }
 
         int cond = stack.pop();
         int end_index = -1;

@@ -12,7 +12,6 @@ import java.io.PrintStream;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class MainTest {
-
     private ByteArrayOutputStream output = new ByteArrayOutputStream();
 
     void setInput(String s) {
@@ -27,7 +26,6 @@ public class MainTest {
     }
 
     @Test
-    @DisplayName("Comments")
     void test1() {
         setInput("# 5 5 3 + print\n");
         Main.main(new String[0]);
@@ -163,7 +161,6 @@ public class MainTest {
     }
 
     @Test
-    @DisplayName("Less")
     void test15() {
         setInput("1 2 < print\n");
         Main.main(new String[0]);
@@ -172,7 +169,6 @@ public class MainTest {
     }
 
     @Test
-    @DisplayName("Greater")
     void test16() {
         setInput("1 2 > print\n");
         Main.main(new String[0]);
@@ -181,7 +177,6 @@ public class MainTest {
     }
 
     @Test
-    @DisplayName("Condition 1")
     void test18() {
         setInput("5 dup [ print 1 - dup ]\n");
         Main.main(new String[0]);
@@ -190,7 +185,6 @@ public class MainTest {
     }
 
     @Test
-    @DisplayName("Condition 2")
     void test19() {
         setInput("define factorial 1 swap dup [ dup rot * swap 1 - dup ] drop ;\n" +
                 "5 factorial print\n");
@@ -200,7 +194,6 @@ public class MainTest {
     }
 
     @Test
-    @DisplayName("Condition 3")
     void test21() {
         setInput("0 1 < [ 1 print 0 ]\n");
         Main.main(new String[0]);
@@ -209,7 +202,6 @@ public class MainTest {
     }
 
     @Test
-    @DisplayName("Unknown cmd")
     void test22() {
         setInput("Unk\n");
         Main.main(new String[0]);
@@ -218,7 +210,6 @@ public class MainTest {
     }
 
     @Test
-    @DisplayName("Minimum")
     void test24() {
         setInput("define min\n" +
                 "  dup rot dup rot 1 rot rot  <\n" +
@@ -232,7 +223,6 @@ public class MainTest {
     }
 
     @Test
-    @DisplayName("Loop")
     void test25() {
         setInput("5\n" + "dup [ dup dup [ print 1 - dup ] drop 1 - dup ]");
         Main.main(new String[0]);
@@ -241,6 +231,21 @@ public class MainTest {
                 "1\n" + "3\n" + "2\n" + "1\n" + "2\n" + "1\n" + "1\n", output.toString());
     }
 
+    @Test
+    void test28() {
+        setInput("5\n" + "swap");
+        Main.main(new String[0]);
+
+        assertEquals("# Not enough elements in stack to command\n", output.toString());
+    }
+
+    @Test
+    void test27() {
+        setInput("1 1 < print\n");
+        Main.main(new String[0]);
+
+        assertEquals("0\n", output.toString());
+    }
 
     @AfterEach
     void tearDown() {

@@ -14,25 +14,22 @@ public abstract class Cmd {
 
     private static Factory factory = Factory.getInstance();
 
-    public static void run()
-    {
-        if(line.isEmpty())
+    public static void run() {
+        if (line.isEmpty())
             return;
 
-        if(!line.get(0).equals("") && line.get(0).charAt(0) == '#')
+        if (!line.get(0).equals("") && line.get(0).charAt(0) == '#')
             line.clear();
 
-        while(!line.isEmpty() && !defining_process)
-        {
+        while (!line.isEmpty() && !defining_process) {
             String str = line.get(0);
             line.remove(0);
 
-            if(str.equals(" ") || str.equals("\t") || str.equals("") || str.equals("]"))
+            if (str.equals(" ") || str.equals("\t") || str.equals("") || str.equals("]"))
                 continue;
 
             ArrayList<String> part = defined.get(str);
-            if(part != null)
-            {
+            if (part != null) {
                 for (int i = 1; i <= part.size(); i++) {
                     line.add(0, (part.get(part.size() - i)));
                 }
@@ -50,16 +47,19 @@ public abstract class Cmd {
                     continue;
                 }
 
-                cur_cmd.execution();
+                try {
+                    cur_cmd.execution();
+                } catch (EmptyStackException exception) {
+                    System.out.println("# Not enough elements in stack to command");
+                }
             }
         }
 
-        if(defining_process)
-        {
+        if (defining_process) {
             Define d = new Define();
             d.execution();
         }
     }
 
-    public abstract void execution();
+    public abstract void execution() throws EmptyStackException;
 }
